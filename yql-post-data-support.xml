@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<table xmlns="http://query.yahooapis.com/v1/schema/table.xsd">
+  <meta>
+  <author>Francois Duquette</author>
+  <description>Posting data to a REST resource</description>
+  <sampleQuery><![CDATA[ 
+select * from {table} where
+url='http://yourhost/api/resource' 
+and postdata='{"foo":"bar","toto":"titi"}'
+]]></sampleQuery>
+  <documentationURL></documentationURL>
+  </meta>
+  <bindings>
+    <select itemPath="" produces="JSON">
+    <urls>
+      <url>{url}</url>
+    </urls>
+    <inputs>
+      <key id="url" type="xs:string" required="true" paramType="variable"/>
+      <key id="postdata" type="xs:string" required="true" paramType="variable"/>
+    </inputs>
+    <execute>
+    <![CDATA[
+      var myRequest = y.rest(url);
+      var postResponse = myRequest.accept('application/json').
+                 contentType("application/json").
+                 post(postdata);
+                 
+	  var responseData = postResponse.response;
+      responseData.httpStatusCode = postResponse.status;            
+      response.object = responseData;
+    ]]>
+    </execute>
+  </select> 
+  </bindings>
+</table>
